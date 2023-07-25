@@ -5,44 +5,26 @@ session_start();
 // Definisikan $error_message dengan nilai kosong
 $error_message = "";
 
-// Memeriksa jika form login telah dikirim
-if (isset($_POST['username']) && isset($_POST['password'])) {
+// Memeriksa jika form registrasi telah dikirim
+if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
     require_once "config.php";
 
-    // Mendapatkan nilai dari form login
+    // Mendapatkan nilai dari form registrasi
     $username = $_POST['username'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
     // Mengamankan query dengan prepared statement
-    $query = "SELECT * FROM users WHERE username = ?";
+    $query = "INSERT INTO users (username, email, password, is_admin) VALUES (?, ?, ?, ?)";
     $stmt = mysqli_prepare($connect, $query);
-    mysqli_stmt_bind_param($stmt, "s", $username);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    if (mysqli_num_rows($result) == 1) {
-        $row = mysqli_fetch_assoc($result);
-
-        // Memeriksa kesesuaian password
-        if ($password == $row['password']) {
-            // Menyimpan data pengguna ke sesi
-            $_SESSION['id'] = $row['id'];
-            $_SESSION['username'] = $row['username'];
-            $_SESSION['is_admin'] = $row['is_admin'];
-
-            // Mengecek level pengguna dan mengarahkan ke halaman yang sesuai
-            if ($_SESSION['is_admin'] == '0') {
-                header("Location: index.php");
-                exit();
-            } elseif ($_SESSION['is_admin'] == '1') {
-                header("Location: dashboard_admin.php");
-                exit();
-            }
-        } else {
-            $error_message = "Password yang Anda masukkan salah.";
-        }
+    $is_admin = 0; // Nilai default untuk is_admin (tidak admin)
+    mysqli_stmt_bind_param($stmt, "sssi", $username, $email, $password, $is_admin);
+    if (mysqli_stmt_execute($stmt)) {
+        // Jika registrasi berhasil, arahkan ke halaman login
+        header("Location: login.php");
+        exit();
     } else {
-        $error_message = "Username tidak ditemukan.";
+        $error_message = "Registrasi gagal. Silakan coba lagi.";
     }
 
     // Menutup koneksi database
@@ -51,19 +33,20 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 }
 ?>
 
+
 <!-- Kode HTML seperti sebelumnya -->
 
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sistem Login</title>
+    <title>Sistem Registrasi</title>
     <style>
         body {
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
         }
-        
+
         .container {
             max-width: 400px;
             margin: 0 auto;
@@ -72,28 +55,29 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        
+
         h2 {
             text-align: center;
             margin-bottom: 20px;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         label {
             font-weight: bold;
         }
-        
+
         input[type="text"],
-        input[type="password"] {
+        input[type="password"],
+        input[type="email"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        
+
         input[type="submit"] {
             width: 100%;
             padding: 10px;
@@ -103,20 +87,24 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             border-radius: 4px;
             cursor: pointer;
         }
-        
+
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
-        
+
         .error-message {
             color: red;
             margin-bottom: 10px;
+        }
+
+        .text-center {
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Sistem Login</h2>
+        <h2>Sistem Registrasi</h2>
         <?php if (isset($error_message)) { ?>
             <p class="error-message"><?php echo $error_message; ?></p>
         <?php } ?>
@@ -127,15 +115,20 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             </div>
 
             <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
             </div>
 
             <div class="form-group">
-                <input type="submit" name="submit" value="Login">
+                <input type="submit" name="submit" value="Register">
             </div>
         </form>
-        <p class="text-center">Belum punya akun? <a href="register.php">Bikin sekarang</a></p>
+        <p class="text-center">Sudah punya akun? <a href="login.php">Login sekarang</a></p>
     </div>
 </body>
 </html>

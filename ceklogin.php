@@ -18,7 +18,7 @@ if ($cek > 0) {
     if ($is_admin == "1") {
         header("location: dashboard_admin.php");
     } else if ($is_admin == "0") {
-        header("location: dashboard_user.php");
+        header("location: index.php");
     }
 } else {
     header("location: index.php?pesan=gagal");
