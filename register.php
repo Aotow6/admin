@@ -2,8 +2,9 @@
 // Memulai sesi
 session_start();
 
-// Definisikan $error_message dengan nilai kosong
+// Definisikan $error_message dan $success_message dengan nilai kosong
 $error_message = "";
+$success_message = "";
 
 // Memeriksa jika form registrasi telah dikirim
 if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
@@ -20,7 +21,9 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['passwor
     $is_admin = 0; // Nilai default untuk is_admin (tidak admin)
     mysqli_stmt_bind_param($stmt, "sssi", $username, $email, $password, $is_admin);
     if (mysqli_stmt_execute($stmt)) {
-        // Jika registrasi berhasil, arahkan ke halaman login
+        // Jika registrasi berhasil, simpan pesan sukses di session
+        $_SESSION['success_message'] = "Registrasi berhasil. Silakan login dengan akun Anda.";
+        // Redirect ke halaman login
         header("Location: login.php");
         exit();
     } else {

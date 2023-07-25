@@ -6,6 +6,13 @@ session_start();
 $error_message = "";
 
 // Memeriksa jika form login telah dikirim
+// Memeriksa apakah ada pesan sukses yang disimpan di session
+if (isset($_SESSION['success_message'])) {
+    $success_message = $_SESSION['success_message'];
+    // Hapus pesan sukses dari session agar hanya ditampilkan satu kali
+    unset($_SESSION['success_message']);
+}
+
 if (isset($_POST['username']) && isset($_POST['password'])) {
     require_once "config.php";
 
@@ -39,10 +46,10 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 exit();
             }
         } else {
-            $error_message = "Password yang Anda masukkan salah.";
+            $error_message = "Login Eror.";
         }
     } else {
-        $error_message = "Username tidak ditemukan.";
+        $error_message = "Login Eror.";
     }
 
     // Menutup koneksi database
@@ -112,14 +119,21 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             color: red;
             margin-bottom: 10px;
         }
+        .success-message {
+            color: green;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Sistem Login</h2>
         <?php if (isset($error_message)) { ?>
-            <p class="error-message"><?php echo $error_message; ?></p>
-        <?php } ?>
+    <p class="error-message"><?php echo $error_message; ?></p>
+<?php } ?>
+<?php if (isset($success_message)) { ?>
+    <p class="success-message"><?php echo $success_message; ?></p>
+<?php } ?>
         <form action="" method="POST">
             <div class="form-group">
                 <label for="username">Username:</label>
