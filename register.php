@@ -15,25 +15,35 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['passwor
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Mengamankan query dengan prepared statement
-    $query = "INSERT INTO users (username, email, password, is_admin) VALUES (?, ?, ?, ?)";
-    $stmt = mysqli_prepare($connect, $query);
-    $is_admin = 0; // Nilai default untuk is_admin (tidak admin)
-    mysqli_stmt_bind_param($stmt, "sssi", $username, $email, $password, $is_admin);
-    if (mysqli_stmt_execute($stmt)) {
-        // Jika registrasi berhasil, simpan pesan sukses di session
-        $_SESSION['success_message'] = "Registrasi berhasil. Silakan login dengan akun Anda.";
-        // Redirect ke halaman login
-        header("Location: login.php");
-        exit();
+    // Validasi nama dan password
+    if (strlen($username) < 6) {
+        $error_message = "Nama harus terdiri dari minimal 6 karakter.";
+    } elseif (strlen($password) < 5) {
+        $error_message = "Password harus terdiri dari minimal 5 karakter.";
     } else {
-        $error_message = "Registrasi gagal. Silakan coba lagi.";
-    }
+        // Mengamankan query dengan prepared statement
+        $query = "INSERT INTO users (username, email, password, is_admin) VALUES (?, ?, ?, ?)";
+        $stmt = mysqli_prepare($connect, $query);
+        $is_admin = 0; // Nilai default untuk is_admin (tidak admin)
+        mysqli_stmt_bind_param($stmt, "sssi", $username, $email, $password, $is_admin);
+        if (mysqli_stmt_execute($stmt)) {
+            // Jika registrasi berhasil, simpan pesan sukses di session
+            $_SESSION['success_message'] = "Registrasi berhasil. Silakan login dengan akun Anda.";
+            // Redirect ke halaman login
+            header("Location: login.php");
+            exit();
+        } else {
+            $error_message = "Registrasi gagal. Silakan coba lagi.";
+        }
 
-    // Menutup koneksi database
-    mysqli_stmt_close($stmt);
-    mysqli_close($connect);
+        // Menutup koneksi database
+        mysqli_stmt_close($stmt);
+        mysqli_close($connect);
+    }
+    $username_value = $username;
+    $email_value = $email;
 }
+
 ?>
 
 
@@ -114,17 +124,17 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['passwor
         <form action="" method="POST">
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" value="<?php echo $username_value; ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" value="<?php echo $email_value; ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password"  required>
             </div>
 
             <div class="form-group">
