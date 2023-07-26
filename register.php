@@ -6,8 +6,12 @@ session_start();
 $error_message = "";
 $success_message = "";
 
+// Definiskan variabel untuk menyimpan nilai input yang sudah dimasukkan dengan default kosong
+$username_value = "";
+$email_value = "";
+
 // Memeriksa jika form registrasi telah dikirim
-if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     require_once "config.php";
 
     // Mendapatkan nilai dari form registrasi
@@ -40,9 +44,12 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['passwor
         mysqli_stmt_close($stmt);
         mysqli_close($connect);
     }
+
+    // Simpan nilai input yang sudah dimasukkan untuk kemudian diisi kembali di form
     $username_value = $username;
     $email_value = $email;
 }
+
 
 ?>
 

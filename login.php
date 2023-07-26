@@ -2,8 +2,12 @@
 // Memulai sesi
 session_start();
 
-// Definisikan $error_message dengan nilai kosong
+// Definisikan $error_message dan $success_message dengan nilai kosong
 $error_message = "";
+$success_message = "";
+
+// Inisialisasi variabel $username dengan nilai kosong
+$username = "";
 
 // Memeriksa jika form login telah dikirim
 // Memeriksa apakah ada pesan sukses yang disimpan di session
@@ -56,12 +60,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     mysqli_stmt_close($stmt);
     mysqli_close($connect);
 }
-$username_value = $username;
-
 ?>
 
 <!-- Kode HTML seperti sebelumnya -->
-
 
 <!DOCTYPE html>
 <html>
@@ -139,7 +140,7 @@ $username_value = $username;
         <form action="" method="POST">
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="username" value="<?php echo $username_value; ?>" required>
+                <input type="text" id="username" name="username" value="<?php echo $username; ?>" required>
             </div>
 
             <div class="form-group">
