@@ -70,7 +70,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sistem Login</title>
+    <title>Login</title>
     <style>
         body {
             background-color: #f8f9fa;

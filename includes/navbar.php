@@ -38,32 +38,20 @@
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Components:</h6>
-            <a class="collapse-item" href="buttons.html">Data</a>
-            <a class="collapse-item" href="cards.html">Riwayat</a>
-            <a class="collapse-item" href="cards.html">Hasil Pelatihan</a>
+            <a class="collapse-item" href="data.php">Data</a>
+            <a class="collapse-item" href="riwayat.php">Riwayat</a>
+            <a class="collapse-item" href="hasil.php">Hasil Pelatihan</a>
         </div>
     </div>
 </li>
+
 
 <!-- Nav Item - Utilities Collapse Menu -->
 <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-        aria-expanded="true" aria-controls="collapseUtilities">
-        <i class="fas fa-fw fa-calendar"></i>
-        <span>Daftar Pelatihan</span>
-    </a>
-    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-        data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Custom Utilities:</h6>
-            <a class="collapse-item" href="utilities-color.html">SMK</a>
-            <a class="collapse-item" href="utilities-border.html">SMA</a>
-            <a class="collapse-item" href="utilities-animation.html">Sl</a>
-            <a class="collapse-item" href="utilities-other.html">Other</a>
-        </div>
-    </div>
+    <a class="nav-link" href="daftar_pelatihan.php">
+    <i class="fas fa-fw fa-calendar"></i>
+    <span>Daftar Pelatihan</span></a>
 </li>
-
 <!-- Divider -->
 <hr class="sidebar-divider">
 
@@ -146,7 +134,14 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.php">Logout</a>
+                    <form id="logout-form" action="logout.php" method="POST" style="display: none;">
+    <!-- Anda juga bisa menggunakan button biasa dengan type="submit" -->
+    <input type="hidden" name="logout" value="true">
+</form>
+<button class="btn btn-danger" data-toggle="modal" data-target="#logoutModal" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-white"></i> Logout
+</button>
+
                 </div>
             </div>
         </div>

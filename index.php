@@ -79,13 +79,13 @@ include('includes/navbar.php');
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>                                    
-                                <form id="logout-form" action="logout.php" method="POST" style="display: none;">
+                                <data-toggle="modal" data-target="#logoutModal" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
+                            </a>form id="logout-form" action="logout.php" method="POST" style="display: none;">
                             <!-- Anda juga bisa menggunakan button biasa dengan type="submit" -->
                             <input type="hidden" name="logout" value="true">
                             </form>
-                            <a  class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
-                            </a>
+                            <a  class="dropdown-item" href="#" 
                             </div>
                         </li>
 

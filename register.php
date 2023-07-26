@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sistem Registrasi</title>
+    <title>Registrasi</title>
     <style>
         body {
             background-color: #f8f9fa;
