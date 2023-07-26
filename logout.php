@@ -1,10 +1,16 @@
 <?php
+// logout.php
+
 // mengaktifkan session php
 session_start();
 
-// menghapus semua session
-session_destroy();
+// Memeriksa jika form logout telah dikirim
+if (isset($_POST['logout'])) {
+    // menghapus semua session
+    session_destroy();
 
-// mengalihkan halaman ke halaman login
-header("location:form_login.php");
+    // mengalihkan halaman kembali ke halaman login atau halaman lain yang sesuai
+    header("location: login.php");
+    exit();
+}
 ?>

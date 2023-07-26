@@ -41,6 +41,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             $_SESSION['username'] = $row['username'];
             $_SESSION['is_admin'] = $row['is_admin'];
 
+            // Simpan juga nama pengguna ke sesi
+            $_SESSION['user_name'] = $row['username'];
+
             // Mengecek level pengguna dan mengarahkan ke halaman yang sesuai
             if ($_SESSION['is_admin'] == '0') {
                 header("Location: index.php");

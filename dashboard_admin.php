@@ -1,6 +1,27 @@
-<?php include('includes/header.php');
-      include('includes/navbar.php');  
-?>
+<?php 
+    session_start();
+
+    if (!isset($_SESSION['id'])) {
+        // Jika belum login, alihkan ke halaman login atau berikan pesan akses ditolak
+        header("Location: login.php");
+        exit();
+    }
+    
+    // Cek is_admin dari sesi pengguna
+    $is_admin = $_SESSION['is_admin'];
+    
+    // Jika is_admin bukan 1 (tidak memiliki akses admin)
+    if ($is_admin == '0') {
+        // Alihkan pengguna ke halaman lain atau berikan pesan akses ditolak
+        header("HTTP/1.0 404 Not Found");
+        exit();
+    }
+
+    // Lanjutkan dengan halaman dashboard admin
+    include('config.php');
+    include('includes/header.php');
+    include('includes/navbar.php');  
+?> 
         
         
         
@@ -59,18 +80,20 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-4 mt-2 d-none d-lg-inline text-gray-600 font-weight-bold"><?php echo $_SESSION['user_name']; ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
-                            <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
+                                <div class="dropdown-divider"></div>                                    
+                                <form id="logout-form" action="logout.php" method="POST" style="display: none;">
+                            <!-- Anda juga bisa menggunakan button biasa dengan type="submit" -->
+                            <input type="hidden" name="logout" value="true">
+                            </form>
+                            <a  class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
+                            </a>
                             </div>
                         </li>
 
