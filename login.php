@@ -75,20 +75,40 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         body {
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
+            position: relative; /* Diperlukan untuk menentukan posisi pseudo-element */
+            z-index: 1; /* Pastikan konten halaman berada di atas latar belakang */
+                
         }
-        
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('img/latar_bkg1.jpg'); /* Ganti 'latar_bkg.jpg' dengan path dan nama file gambar latar belakang Anda */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(2px); /* Efek blur pada latar belakang */
+            z-index: -1; /* Pastikan pseudo-element berada di belakang konten halaman */
         }
-        
+
+            .container {
+                max-width: 400px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f7f9fa;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                color: #212529;
+                
+            }
         h2 {
             text-align: center;
             margin-bottom: 20px;
+            color: #fff;
         }
         
         .form-group {
@@ -101,7 +121,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         
         input[type="text"],
         input[type="password"] {
-            width: 100%;
+            width: 95%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -132,8 +152,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     </style>
 </head>
 <body>
+<h2>Sistem Login</h2>
+
     <div class="container">
-        <h2>Sistem Login</h2>
         <?php if (isset($error_message)) { ?>
     <p class="error-message"><?php echo $error_message; ?></p>
 <?php } ?>
