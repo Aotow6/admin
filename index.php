@@ -68,26 +68,25 @@ include('includes/navbar.php');
                      
 
                         <!- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-4 mt-2 d-none d-lg-inline text-gray-600 font-weight-bold"><?php echo $_SESSION['user_name']; ?></span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <div class="dropdown-divider"></div>                                    
-                                <data-toggle="modal" data-target="#logoutModal" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
-                            </a>form id="logout-form" action="logout.php" method="POST" style="display: none;">
-                            <!-- Anda juga bisa menggunakan button biasa dengan type="submit" -->
-                            <input type="hidden" name="logout" value="true">
-                            </form>
-                            <a  class="dropdown-item" href="#" 
-                            </div>
-                        </li>
+                    <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="mr-4 mt-2 d-none d-lg-inline text-gray-600 font-weight-bold"><?php echo $_SESSION['user_name']; ?></span>
+                    <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                    </a>
+                        <!-- Dropdown - User Information -->
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                    aria-labelledby="userDropdown">
+                    <div class="dropdown-divider"></div>
+                    <form id="logout-form" action="logout.php" method="POST">
+                    <input type="hidden" name="logout" value="true">
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
+                 </a>
+                    </form>
+                    </div>
+                </li>
+
 
                     </ul>
 
