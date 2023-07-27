@@ -2,6 +2,15 @@
     // Memulai sesi
     session_start();
 
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
+
+    require 'vendor/autoload.php';
+
+    $mail= new PHPMailer(true);
+
+
     // Definisikan $error_message dan $success_message dengan nilai kosong
     $error_message = "";
     $success_message = "";
