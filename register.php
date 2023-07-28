@@ -291,12 +291,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 
                 <div class="form-group">
                     <label for="NIP">NIP:</label>
-                    <input type="text" id="NIP" name="NIP" value="<?php echo $NIP_value; ?>" required>
+                    <input type="text" id="NIP" name="NIP" value="<?php echo $NIP_value; ?>" maxlength="18" required>
                 </div>
 
                 <div class="form-group">
                     <label for="NUPTK">NUPTK:</label>
-                    <input type="text" id="NUPTK" name="NUPTK" value="<?php echo $NUPTK_value; ?>" required>
+                    <input type="text" id="NUPTK" name="NUPTK" value="<?php echo $NUPTK_value; ?>"  maxlength="16"  required>
                 </div>
 
                 <div class="form-group">
@@ -326,7 +326,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 
                 <div class="form-group">
                     <label for="NPSN_sekolah">NPSN Sekolah:</label>
-                    <input type="text" id="NPSN_sekolah" name="NPSN_sekolah" value="<?php echo $NPSN_sekolah_value; ?>" required>
+                    <input type="text" id="NPSN_sekolah" name="NPSN_sekolah" value="<?php echo $NPSN_sekolah_value; ?>" maxlength="8" required>
                 </div>
 
                 <div class="form-group">
