@@ -13,18 +13,18 @@ $mail = new PHPMailer(true);
 
 try {
     // Server settings
-/*     $mail->SMTPDebug = SMTP::DEBUG_SERVER; // Enable verbose debug output (You can set it to '0' to disable debugging)
- */    $mail->isSMTP(); // Send using SMTP
+    $mail->SMTPDebug = SMTP::DEBUG_SERVER; // Enable verbose debug output (You can set it to '0' to disable debugging)
+     $mail->isSMTP(); // Send using SMTP
     $mail->Host = 'smtp.gmail.com'; // Set the SMTP server to send through
     $mail->SMTPAuth = true; // Enable SMTP authentication
-    $mail->Username = 'simantau3@gmail.com'; // SMTP username (your Gmail address)
-    $mail->Password = 'mypassword'; // SMTP password (your Gmail password)
+    $mail->Username = 'manusianpc2@gmail.com'; // SMTP username (your Gmail address)
+    $mail->Password = 'ufxnwzogbyildvik'; // SMTP password (your Gmail password)
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // Enable implicit TLS encryption (you can also use PHPMailer::ENCRYPTION_STARTTLS)
     $mail->Port = 465; // TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
     // Recipients
-    $mail->setFrom('simantau3@gmail.com', 'Simantau'); // Set the sender's email address and name
-    $mail->addAddress('satria.rajawali3@gmail.com'); // Add a recipient email and name (optional)
+    $mail->setFrom('manusianpc2@gmail.com','gweh' ); // Set the sender's email address and name
+    $mail->addAddress('support@adnan-tech.com', 'Adnan Tech'); // Add a recipient email and name (optional)
 
     // Content
     $mail->isHTML(true); // Set email format to HTML (you can set it to 'false' for plain text)
