@@ -2,15 +2,6 @@
     // Memulai sesi
     session_start();
 
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\SMTP;
-    use PHPMailer\PHPMailer\Exception;
-
-    require 'vendor/autoload.php';
-
-    $mail= new PHPMailer(true);
-
-
     // Definisikan $error_message dan $success_message dengan nilai kosong
     $error_message = "";
     $success_message = "";
@@ -30,99 +21,108 @@
 
 
     // Memeriksa jika form registrasi telah dikirim
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
-        require_once "config.php";
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
+    require_once "config.php";
 
-        // Mendapatkan nilai dari form registrasi
-        $username = $_POST['username'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+    // Membuka transaksi
+    mysqli_autocommit($connect, false);
 
-        // Validasi nama dan password
-        if (strlen($username) < 6) {
-            $error_message = "Nama harus terdiri dari minimal 6 karakter.";
-        } elseif (strlen($password) < 5) {
-            $error_message = "Password harus terdiri dari minimal 5 karakter.";
-        } else {
-            // Mengamankan query dengan prepared statement
-            $query_user = "INSERT INTO users (username, email, password, is_admin) VALUES (?, ?, ?, ?)";
-            $stmt_user = mysqli_prepare($connect, $query_user);
-            $is_admin = 0; // Nilai default untuk is_admin (tidak admin)
-            mysqli_stmt_bind_param($stmt_user, "sssi", $username, $email, $password, $is_admin);
+    // Mendapatkan nilai dari form registrasi
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Validasi nama dan password
+    if (strlen($username) < 6) {
+        $error_message = "Nama harus terdiri dari minimal 6 karakter.";
+    } elseif (strlen($password) < 5) {
+        $error_message = "Password harus terdiri dari minimal 5 karakter.";
+    } else {
+        // Mengamankan query dengan prepared statement
+        $query_user = "INSERT INTO users (username, email, password, is_admin) VALUES (?, ?, ?, ?)";
+        $stmt_user = mysqli_prepare($connect, $query_user);
+        $is_admin = 0; // Nilai default untuk is_admin (tidak admin)
+        mysqli_stmt_bind_param($stmt_user, "sssi", $username, $email, $password, $is_admin);
+        
+        if (mysqli_stmt_execute($stmt_user)) {
+            // Jika registrasi ke tabel users berhasil, dapatkan nilai user_id yang baru saja di-generate
+            $user_id = mysqli_insert_id($connect);
             
-            if (mysqli_stmt_execute($stmt_user)) {
-                // Jika registrasi ke tabel users berhasil, dapatkan nilai user_id yang baru saja di-generate
-                $user_id = mysqli_insert_id($connect);
-                
-                // Selanjutnya simpan data guru ke dalam tabel data_guru
-                $nama_lengkap = $_POST['nama_lengkap'];
-                $NIP = $_POST['NIP'];
-                $NUPTK = $_POST['NUPTK'];
-                $gelar = $_POST['gelar'];
-                $tanggal_lahir = $_POST['tanggal_lahir'];
-                $tempat_lahir = $_POST['tempat_lahir'];
-                $jenjang_ngajar = $_POST['jenjang_ngajar'];
-                $NPSN_sekolah = $_POST['NPSN_sekolah'];
-                $Nama_sekolah = $_POST['Nama_sekolah'];
+            // Selanjutnya simpan data guru ke dalam tabel data_guru
+            $nama_lengkap = $_POST['nama_lengkap'];
+            $NIP = $_POST['NIP'];
+            $NUPTK = $_POST['NUPTK'];
+            $gelar = $_POST['gelar'];
+            $tanggal_lahir = $_POST['tanggal_lahir'];
+            $tempat_lahir = $_POST['tempat_lahir'];
+            $jenjang_ngajar = $_POST['jenjang_ngajar'];
+            $NPSN_sekolah = $_POST['NPSN_sekolah'];
+            $Nama_sekolah = $_POST['Nama_sekolah'];
 
-                // Validasi input guru
-                if (strlen($nama_lengkap) < 6) {
-                    $error_message = "Nama Lengkap Guru harus terdiri dari minimal 6 karakter.";
-                } elseif (strlen($NIP) !== 18) {
-                    $error_message = "NIP harus terdiri dari tepat 18 karakter.";
-                } elseif (strlen($NUPTK) !== 16) {
-                    $error_message = "NUPTK harus terdiri dari tepat 16 karakter.";
-                } elseif (empty($tanggal_lahir)) {
-                    $error_message = "Tanggal Lahir harus diisi.";
-                } elseif (empty($tempat_lahir)) {
-                    $error_message = "Tempat Lahir harus diisi.";
-                } elseif (strlen($NPSN_sekolah) !== 8) {
-                    $error_message = "NPSN Sekolah harus terdiri dari tepat 8 karakter.";
-                } else {
-                    // Semua input guru valid, simpan ke dalam tabel data_guru
-                    $query_guru = "INSERT INTO data_guru (user_id, nama_lengkap, NIP, NUPTK, gelar, tanggal_lahir, tempat_lahir, jenjang_ngajar, NPSN_sekolah, Nama_sekolah) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    $stmt_guru = mysqli_prepare($connect, $query_guru);
-                    mysqli_stmt_bind_param($stmt_guru, "isssssssis", $user_id, $nama_lengkap, $NIP, $NUPTK, $gelar, $tanggal_lahir, $tempat_lahir, $jenjang_ngajar, $NPSN_sekolah, $Nama_sekolah);
-                    
-                    if (mysqli_stmt_execute($stmt_guru)) {
-                        // Jika registrasi ke tabel ata_guru berhasil, simpan pesan sukses di session
-                        $_SESSION['success_message'] = "Registrasi berhasil. Silakan login dengan akun Anda.";
-                        // Redirect ke halaman login
-                        header("Location: login.php");
-                        exit();
-                    } else {
-                        $error_message = "Registrasi gagal. Silakan coba lagi.";
-                    }
-
-                    // Menutup statement guru
-                    mysqli_stmt_close($stmt_guru);
-                }
+            // Validasi input guru
+            if (strlen($nama_lengkap) < 6) {
+                $error_message = "Nama Lengkap Guru harus terdiri dari minimal 6 karakter.";
+            } elseif (strlen($NIP) !== 18) {
+                $error_message = "NIP harus terdiri dari tepat 18 karakter.";
+            } elseif (strlen($NUPTK) !== 16) {
+                $error_message = "NUPTK harus terdiri dari tepat 16 karakter.";
+            } elseif (empty($tanggal_lahir)) {
+                $error_message = "Tanggal Lahir harus diisi.";
+            } elseif (empty($tempat_lahir)) {
+                $error_message = "Tempat Lahir harus diisi.";
+            } elseif (strlen($NPSN_sekolah) !== 8) {
+                $error_message = "NPSN Sekolah harus terdiri dari tepat 8 karakter.";
             } else {
-                $error_message = "Registrasi gagal. Silakan coba lagi.";
-            }
+                // Semua input guru valid, simpan ke dalam tabel data_guru
+                $query_guru = "INSERT INTO data_guru (user_id, nama_lengkap, NIP, NUPTK, gelar, tanggal_lahir, tempat_lahir, jenjang_ngajar, NPSN_sekolah, Nama_sekolah) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt_guru = mysqli_prepare($connect, $query_guru);
+                mysqli_stmt_bind_param($stmt_guru, "isssssssis", $user_id, $nama_lengkap, $NIP, $NUPTK, $gelar, $tanggal_lahir, $tempat_lahir, $jenjang_ngajar, $NPSN_sekolah, $Nama_sekolah);
+                
+                if (mysqli_stmt_execute($stmt_guru)) {
+                    // Jika registrasi ke tabel ata_guru berhasil, simpan pesan sukses di session
+                    $_SESSION['success_message'] = "Registrasi berhasil. Silakan login dengan akun Anda.";
+                    // Commit transaksi untuk menyimpan perubahan ke database
+                    mysqli_commit($connect);
+                    // Redirect ke halaman login
+                    header("Location: login.php");
+                    exit();
+                } else {
+                    $error_message = "Registrasi gagal. Silakan coba lagi.";
+                }
 
-            // Menutup statement user
-            mysqli_stmt_close($stmt_user);
-            // Menutup koneksi database
-            mysqli_close($connect);
+                // Menutup statement guru
+                mysqli_stmt_close($stmt_guru);
+            }
+        } else {
+            $error_message = "Registrasi gagal. Silakan coba lagi.";
         }
 
-        // Simpan nilai input yang sudah dimasukkan untuk kemudian diisi kembali di form
-        $username_value = $username;
-        $email_value = $email;
-        $nama_lengkap_value = $nama_lengkap;
-        $NIP_value = $NIP;
-        $NUPTK_value = $NUPTK;
-        $gelar_value = $gelar;
-        $tanggal_lahir_value = $tanggal_lahir;
-        $tempat_lahir_value = $tempat_lahir;
-        $jenjang_ngajar_value = $jenjang_ngajar;
-        $NPSN_sekolah_value = $NPSN_sekolah;
-        $Nama_sekolah_value = $Nama_sekolah;
+        // Jika ada kesalahan, rollback transaksi
+        if (!empty($error_message)) {
+            mysqli_rollback($connect);
+        }
 
+        // Menutup statement user
+        mysqli_stmt_close($stmt_user);
+        // Menutup koneksi database
+        mysqli_close($connect);
     }
-    ?>
 
+    // Simpan nilai input yang sudah dimasukkan untuk kemudian diisi kembali di form
+    $username_value = $username;
+    $email_value = $email;
+    $nama_lengkap_value = $nama_lengkap;
+    $NIP_value = $NIP;
+    $NUPTK_value = $NUPTK;
+    $gelar_value = $gelar;
+    $tanggal_lahir_value = $tanggal_lahir;
+    $tempat_lahir_value = $tempat_lahir;
+    $jenjang_ngajar_value = $jenjang_ngajar;
+    $NPSN_sekolah_value = $NPSN_sekolah;
+    $Nama_sekolah_value = $Nama_sekolah;
+
+}
+?>
 
     <!-- Kode HTML seperti sebelumnya -->
 
